@@ -21,13 +21,17 @@ def random_choicer(a, b):
 
 def integrate(f, x_left, x_right, n_points, choicer):
     borders = np.linspace(x_left, x_right, n_points + 1)
+    # segments in format [(begin_1, end_1), ..., (begin_n, end_n)]
     segments = np.hstack([
         borders[:-1].reshape(-1, 1),
         borders[1:].reshape(-1, 1)
     ])
+    # choosed points in format [x_1, ... x_n]
     dots = np.apply_along_axis(lambda row: choicer(row[0], row[1]), 1, segments)
+    # [f(x) for x in dots]
     ys = f(dots)
 
+    # sum of y_i * dx_i
     integral_sum = np.sum(ys * (segments[:, 1] - segments[:, 0]))
     
     fig, ax = plt.subplots(1, figsize=(15, 8))
