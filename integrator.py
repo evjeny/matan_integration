@@ -19,7 +19,7 @@ def random_choicer(a, b):
     return np.random.uniform(a, b)
 
 
-def integrate(f, x_left, x_right, n_points, choicer):
+def integrate(f, x_left, x_right, n_points, choicer, save_to=None):
     borders = np.linspace(x_left, x_right, n_points + 1)
     # segments in format [(begin_1, end_1), ..., (begin_n, end_n)]
     segments = np.hstack([
@@ -38,13 +38,17 @@ def integrate(f, x_left, x_right, n_points, choicer):
     ax.bar(segments.mean(axis=1), ys, width=10/n_points)
     ax.set_title(f"Integral sum: {integral_sum}")
 
-    plt.show()
+    if save_to:
+        plt.savefig(save_to)
+    else:
+        plt.show()
 
 
 def main():
     parser = argparse.ArgumentParser(description="Integrator by evjeny. Integrates f(x)=sin(x) on [0, 4Pi]")
     parser.add_argument("-n", type=int, default=100, help="Number of points to split the interval")
     parser.add_argument("-e", type=str, default="mid", help="Type of equipment, must be one of: left, right, mid, random")
+    parser.add_argument("--save_to", type=str, default=None, help="Path to save the plot")
     args = parser.parse_args()
 
     if args.n <= 0:
@@ -62,7 +66,7 @@ def main():
         "random": random_choicer
     }
 
-    integrate(np.sin, 0, 4 * np.pi, args.n, choicers.get(args.e))
+    integrate(np.sin, 0, 4 * np.pi, args.n, choicers.get(args.e), args.save_to)
 
 
 if __name__ == "__main__":
