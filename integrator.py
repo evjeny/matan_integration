@@ -35,8 +35,10 @@ def integrate(f, x_left, x_right, n_points, choicer, save_to=None):
     integral_sum = np.sum(ys * (segments[:, 1] - segments[:, 0]))
     
     fig, ax = plt.subplots(1, figsize=(15, 8))
+    ax.plot(borders, f(borders), c="r", label="f(x)")
     ax.bar(segments.mean(axis=1), ys, width=10/n_points)
     ax.set_title(f"Integral sum: {integral_sum}")
+    ax.legend()
 
     if save_to:
         plt.savefig(save_to)
